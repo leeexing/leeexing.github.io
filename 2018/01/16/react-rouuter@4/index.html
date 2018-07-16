@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.cat.net/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="前端,react," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="遇到简单的坑，没有人及时给与一些指点，很难受">
+<meta name="keywords" content="前端,react">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习 React-router4 时踩的坑">
+<meta property="og:url" content="http://leeeing.com/2018/01/16/react-rouuter@4/index.html">
+<meta property="og:site_name" content="LEE">
+<meta property="og:description" content="遇到简单的坑，没有人及时给与一些指点，很难受">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-16T08:30:47.455Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="学习 React-router4 时踩的坑">
+<meta name="twitter:description" content="遇到简单的坑，没有人及时给与一些指点，很难受">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+
+
+
+  <link rel="canonical" href="http://leeeing.com/2018/01/16/react-rouuter@4/"/>
+
+
+
+
+
+  <title>学习 React-router4 时踩的坑 | LEE</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LEE</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">keep simple | keep sunshine</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://leeeing.com/2018/01/16/react-rouuter@4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leeing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar1.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LEE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">学习 React-router4 时踩的坑</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-16T10:39:44+08:00">
+                2018-01-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,192
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+              <div class="post-description">
+                  遇到简单的坑，没有人及时给与一些指点，很难受
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="React-router-V4"><a href="#React-router-V4" class="headerlink" title="React-router.V4"></a>React-router.V4</h1><pre><code>路由规则位于布局和 UI 本身之间
+</code></pre><h2 id="前面-BB"><a href="#前面-BB" class="headerlink" title="前面 BB"></a>前面 BB</h2><p>不得不吐槽，用过 Vue-router，过来再使用这个，很不爽</p>
+<a id="more"></a>
+<h2 id="理论学习"><a href="#理论学习" class="headerlink" title="理论学习"></a>理论学习</h2><p>直接上手，到处是埋伏</p>
+<h3 id="思维模式的转变"><a href="#思维模式的转变" class="headerlink" title="思维模式的转变"></a>思维模式的转变</h3><blockquote>
+<p>概念上将，路由就是一个基本的单元，基本上是一个梅花的配置文件</p>
+</blockquote>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Route path=<span class="string">"/home"</span> component=&#123;Home&#125;&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h3><blockquote>
+<p>exact</p>
+</blockquote>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Route path=<span class="string">"/"</span> exact component=&#123;HomePage&#125; /&gt;</span><br></pre></td></tr></table></figure>
+<p><code>exact</code> 的意思是，需要完全匹配。也有排他性的意思 – 只有一条路由获胜</p>
+<h3 id="包容性路由"><a href="#包容性路由" class="headerlink" title="包容性路由"></a>包容性路由</h3><blockquote>
+<p>只要匹配上路由，就进行内渲染</p>
+</blockquote>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> PrimaryLayout = <span class="function"><span class="params">()</span> =&gt;</span> (</span><br><span class="line">  &lt;div className=<span class="string">"primary-layout"</span>&gt;</span><br><span class="line">    &lt;header&gt;</span><br><span class="line">      Our React Router <span class="number">4</span> App</span><br><span class="line">      &lt;Route path=<span class="string">"/users"</span> component=&#123;UsersMenu&#125; /&gt;</span><br><span class="line">    &lt;<span class="regexp">/header&gt;</span></span><br><span class="line"><span class="regexp">    &lt;main&gt;</span></span><br><span class="line"><span class="regexp">      &lt;Route path="/</span><span class="string">" exact component=&#123;HomePage&#125; /&gt;</span></span><br><span class="line"><span class="string">      &lt;Route path="</span>/users<span class="string">" component=&#123;UsersPage&#125; /&gt;</span></span><br><span class="line"><span class="string">    &lt;/main&gt;</span></span><br><span class="line"><span class="string">  &lt;/div&gt;</span></span><br><span class="line"><span class="string">)</span></span><br></pre></td></tr></table></figure>
+<p>当我们访问 <code>/users</code> 时，两个组件都会渲染，相同或者不同都没有关系</p>
+<h3 id="排他性路由"><a href="#排他性路由" class="headerlink" title="排他性路由"></a>排他性路由</h3><blockquote>
+<p><switch> 来匹配其中的一个路由</switch></p>
+</blockquote>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> PrimaryLayout = <span class="function"><span class="params">()</span> =&gt;</span> (</span><br><span class="line">  &lt;div className=<span class="string">"primary-layout"</span>&gt;</span><br><span class="line">    &lt;PrimaryHeader /&gt;</span><br><span class="line">    &lt;main&gt;</span><br><span class="line">      &lt;Switch&gt;</span><br><span class="line">        &lt;Route path=<span class="string">"/"</span> exact component=&#123;HomePage&#125; /&gt;</span><br><span class="line">        &lt;Route path=<span class="string">"/users/add"</span> component=&#123;UserAddPage&#125; /&gt;</span><br><span class="line">        &lt;Route path=<span class="string">"/users"</span> component=&#123;UsersPage&#125; /&gt;</span><br><span class="line">        &lt;Redirect to=<span class="string">"/"</span> /&gt;</span><br><span class="line">      &lt;<span class="regexp">/Switch&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/m</span>ain&gt;</span><br><span class="line">  &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">)</span></span><br></pre></td></tr></table></figure>
+<p>在 /users 之前策略性地放置了 /users/add 的路由，以确保正确匹配。由于路径 /users/add 将匹配 /users 和 /users/add，所以最好先把 /users/add 放在前面。<br>如果遇到，<code>&lt;Redirect&gt;</code> 组件将会始终执行浏览器重定向，但是当它位于 <switch> 语句中时，只有在其他路由不匹配的情况下，才会渲染重定向组件。</switch></p>
+<h3 id="嵌套布局"><a href="#嵌套布局" class="headerlink" title="嵌套布局"></a>嵌套布局</h3><blockquote>
+<p>这里挖坑挖得最深</p>
+</blockquote>
+<p>表面上看，嵌套布局很简单，但根据你的选择，可能会因为你 <code>组织路由的方式</code> 而遇到阻碍。</p>
+<figure class="highlight jsx"><figcaption><span>反面教材</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> PrimaryLayout = <span class="function"><span class="params">props</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;div className=<span class="string">"primary-layout"</span>&gt;</span><br><span class="line">      &lt;PrimaryHeader /&gt;</span><br><span class="line">      &lt;main&gt;</span><br><span class="line">        &lt;Switch&gt;</span><br><span class="line">          &lt;Route path=<span class="string">"/"</span> exact component=&#123;HomePage&#125; /&gt;</span><br><span class="line">          &lt;Route path=<span class="string">"/users"</span> exact component=&#123;BrowseUsersPage&#125; /&gt;</span><br><span class="line">          &lt;Route path=<span class="string">"/users/:userId"</span> component=&#123;UserProfilePage&#125; /&gt;</span><br><span class="line">          &lt;Route path=<span class="string">"/products"</span> exact component=&#123;BrowseProductsPage&#125; /&gt;</span><br><span class="line">          &lt;Route path=<span class="string">"/products/:productId"</span> component=&#123;ProductProfilePage&#125; /&gt;</span><br><span class="line">          &lt;Redirect to=<span class="string">"/"</span> /&gt;</span><br><span class="line">        &lt;<span class="regexp">/Switch&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/m</span>ain&gt;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">  )</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">const BrowseUsersPage = () =&gt; (</span></span><br><span class="line"><span class="regexp">  &lt;div className="user-sub-layout"&gt;</span></span><br><span class="line"><span class="regexp">    &lt;aside&gt;</span></span><br><span class="line"><span class="regexp">      &lt;UserNav /</span>&gt;</span><br><span class="line">    &lt;<span class="regexp">/aside&gt;</span></span><br><span class="line"><span class="regexp">    &lt;div className="primary-content"&gt;</span></span><br><span class="line"><span class="regexp">      &lt;BrowseUserTable /</span>&gt;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">  &lt;/</span>div&gt;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> UserProfilePage = <span class="function"><span class="params">props</span> =&gt;</span> (</span><br><span class="line">  &lt;div className=<span class="string">"user-sub-layout"</span>&gt;</span><br><span class="line">    &lt;aside&gt;</span><br><span class="line">      &lt;UserNav /&gt;</span><br><span class="line">    &lt;<span class="regexp">/aside&gt;</span></span><br><span class="line"><span class="regexp">    &lt;div className="primary-content"&gt;</span></span><br><span class="line"><span class="regexp">      &lt;UserProfile userId=&#123;props.match.params.userId&#125; /</span>&gt;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">  &lt;/</span>div&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>可以看到，下面的两个组件中存在相同的 <code>UserNav</code> 组件，这回产生一个重复渲染的问题，因为每次 <code>UserProfilePage</code> 或 <code>BrowseUsersPage</code> 被渲染的时候，一个<code>新的 UserNav</code> 实例被创建，</p>
+<p>思路就应该是将相同的业务组件放在一起</p>
+<figure class="highlight jsx"><figcaption><span>正面例子</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> PrimaryLayout = <span class="function"><span class="params">props</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;div className=<span class="string">"primary-layout"</span>&gt;</span><br><span class="line">      &lt;PrimaryHeader /&gt;</span><br><span class="line">      &lt;main&gt;</span><br><span class="line">        &lt;Switch&gt;</span><br><span class="line">          &lt;Route path=<span class="string">"/"</span> exact component=&#123;HomePage&#125; /&gt;</span><br><span class="line">          &lt;Route path=<span class="string">"/users"</span> component=&#123;UserSubLayout&#125; /&gt;</span><br><span class="line">          &lt;Route path=<span class="string">"/products"</span> component=&#123;ProductSubLayout&#125; /&gt;</span><br><span class="line">          &lt;Redirect to=<span class="string">"/"</span> /&gt;</span><br><span class="line">        &lt;<span class="regexp">/Switch&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/m</span>ain&gt;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">  )</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">const UserSubLayout = () =&gt; (</span></span><br><span class="line"><span class="regexp">  &lt;div className="user-sub-layout"&gt;</span></span><br><span class="line"><span class="regexp">    &lt;aside&gt;</span></span><br><span class="line"><span class="regexp">      &lt;UserNav /</span>&gt;</span><br><span class="line">    &lt;<span class="regexp">/aside&gt;</span></span><br><span class="line"><span class="regexp">    &lt;div className="primary-content"&gt;</span></span><br><span class="line"><span class="regexp">      &lt;Switch&gt;</span></span><br><span class="line"><span class="regexp">        &lt;Route path="/u</span>sers<span class="string">" exact component=&#123;BrowseUsersPage&#125; /&gt;</span></span><br><span class="line"><span class="string">        &lt;Route path="</span>/users/:userId<span class="string">" component=&#123;UserProfilePage&#125; /&gt;</span></span><br><span class="line"><span class="string">      &lt;/Switch&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string">  &lt;/div&gt;</span></span><br><span class="line"><span class="string">)</span></span><br></pre></td></tr></table></figure>
+<p>区别在于，将 <code>user</code> 的子路由和基本路由放在同一个组建里面。如此，共同的组件 <code></code>UserNav` 组件就不会被重复渲染了<br><strong>注意</strong>：我们在布局结构中深入嵌套，路由仍然需要识别它们的完整路径才能匹配。为了节省重复输入（以防你决定将“用户”改为其他内容），请改用 props.match.path</p>
+<figure class="highlight jsx"><figcaption><span>优化</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> UserSubLayout = <span class="function"><span class="params">props</span> =&gt;</span> (</span><br><span class="line">  &lt;div className=<span class="string">"user-sub-layout"</span>&gt;</span><br><span class="line">    &lt;aside&gt;</span><br><span class="line">      &lt;UserNav /&gt;</span><br><span class="line">    &lt;<span class="regexp">/aside&gt;</span></span><br><span class="line"><span class="regexp">    &lt;div className="primary-content"&gt;</span></span><br><span class="line"><span class="regexp">      &lt;Switch&gt;</span></span><br><span class="line"><span class="regexp">        &lt;Route path=&#123;props.match.path&#125; exact component=&#123;BrowseUsersPage&#125; /</span>&gt;</span><br><span class="line">        &lt;Route path=&#123;<span class="string">`<span class="subst">$&#123;props.match.path&#125;</span>/:userId`</span>&#125; component=&#123;UserProfilePage&#125; /&gt;</span><br><span class="line">      &lt;<span class="regexp">/Switch&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>div&gt;</span><br><span class="line">  &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">)</span></span><br></pre></td></tr></table></figure>
+<h3 id="匹配"><a href="#匹配" class="headerlink" title="匹配"></a>匹配</h3><blockquote>
+<p>Props.match</p>
+</blockquote>
+<p>对于知道详情页面渲染的 <code>UserId</code> 以及如何编写沃恩的路由是很有用的。<code>match</code> 对象给我嗯提供了几个属性呢</p>
+<ul>
+<li>match.params</li>
+<li>match.path  // 路由编写的路径：/users/:userId  |  优先选择一个</li>
+<li>match.url   // 浏览器 URL 中的实际路径：/users/12</li>
+</ul>
+<h3 id="避免匹配冲突"><a href="#避免匹配冲突" class="headerlink" title="避免匹配冲突"></a>避免匹配冲突</h3><blockquote>
+<p>一个场景：我们希望能够通过访问 /users/add 和 /users/5/edit 来新增和编辑用户</p>
+</blockquote>
+<figure class="highlight jsx"><figcaption><span>多重匹配</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> UserSubLayout = <span class="function">(<span class="params">&#123; match &#125;</span>) =&gt;</span> (</span><br><span class="line">  &lt;div className=<span class="string">"user-sub-layout"</span>&gt;</span><br><span class="line">    &lt;aside&gt;</span><br><span class="line">      &lt;UserNav /&gt;</span><br><span class="line">    &lt;<span class="regexp">/aside&gt;</span></span><br><span class="line"><span class="regexp">    &lt;div className="primary-content"&gt;</span></span><br><span class="line"><span class="regexp">      &lt;Switch&gt;</span></span><br><span class="line"><span class="regexp">        &lt;Route exact path=&#123;props.match.path&#125; component=&#123;BrowseUsersPage&#125; /</span>&gt;</span><br><span class="line">        &lt;Route path=&#123;<span class="string">`<span class="subst">$&#123;match.path&#125;</span>/add`</span>&#125; component=&#123;AddUserPage&#125; /&gt;</span><br><span class="line">        &lt;Route path=&#123;<span class="string">`<span class="subst">$&#123;match.path&#125;</span>/:userId/edit`</span>&#125; component=&#123;EditUserPage&#125; /&gt;</span><br><span class="line">        &lt;Route path=&#123;<span class="string">`<span class="subst">$&#123;match.path&#125;</span>/:userId`</span>&#125; component=&#123;UserProfilePage&#125; /&gt;</span><br><span class="line">      &lt;<span class="regexp">/Switch&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>div&gt;</span><br><span class="line">  &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">)</span></span><br></pre></td></tr></table></figure>
+<p><strong>Attention</strong>：</p>
+<ol>
+<li>为了确保进行适当的匹配，新增和编辑路由需要战略性地放在详情路由之前。如果详情路径在前面，那么访问 /users/add 时将匹配详情（因为 “add” 将匹配 :userId）。</li>
+<li>如果我们这样创建路径 ${match.path}/:userId(\d+)，来确保 :userId 必须是一个数字，那么我们可以先放置详情路由</li>
+</ol>
+<h3 id="授权路由"><a href="#授权路由" class="headerlink" title="授权路由"></a>授权路由</h3><blockquote>
+<p>根据用户的登陆状态来限制用户访问某些路由</p>
+</blockquote>
+<p>对于未经授权的页面（如“登录”和“忘记密码”）与已授权的页面（应用程序的主要部分）看起来不一样也是常见的。</p>
+<p>解决这个问题，需要考虑一个应用程序的主要入口点</p>
+<figure class="highlight jsx"><figcaption><span>这不就是我一开始遇到的问题吗？</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;Provider store=&#123;store&#125;&gt;</span><br><span class="line">        &lt;BrowserRouter&gt;</span><br><span class="line">          &lt;Switch&gt;</span><br><span class="line">            &lt;Route path=<span class="string">"/auth"</span> component=&#123;UnauthorizedLayout&#125; /&gt;</span><br><span class="line">            &lt;AuthorizedRoute path=<span class="string">"/app"</span> component=&#123;PrimaryLayout&#125; /&gt;</span><br><span class="line">          &lt;<span class="regexp">/Switch&gt;</span></span><br><span class="line"><span class="regexp">        &lt;/</span>BrowserRouter&gt;</span><br><span class="line">      &lt;<span class="regexp">/Provider&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 我遇到的问题是这样的</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">class AppRoute extends React.Component &#123;</span></span><br><span class="line"><span class="regexp">  constructor() &#123;</span></span><br><span class="line"><span class="regexp">    super()</span></span><br><span class="line"><span class="regexp">    this.state = &#123;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">  render() &#123;</span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">      &lt;Router&gt;</span></span><br><span class="line"><span class="regexp">        &lt;div className="app"&gt;</span></span><br><span class="line"><span class="regexp">          /</span><span class="regexp">/ 第三版：直到使用了 Switch 这个路由控制器。包裹在里面的路由只会匹配到一个 路由。</span></span><br><span class="line"><span class="regexp">          &lt;Switch&gt;</span></span><br><span class="line"><span class="regexp">            &lt;Route path="/</span>login<span class="string">" component=&#123;Login&#125;/&gt;</span></span><br><span class="line"><span class="string">            &lt;Route path="</span>/<span class="string">" component=&#123;Home&#125; /&gt;</span></span><br><span class="line"><span class="string">          &lt;/Switch&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">          // 第二版：我想增加一个login页面，但是他的基本布局适合home（‘/’）页面是不一样的 -- 没有 菜单栏，侧边栏之类的，只有空白的登陆表单</span></span><br><span class="line"><span class="string">          // 这样写的问题是，我访问 login 路由的时候，还是会将 index 页面的一些布局渲染出来，这可不是我想要的结果</span></span><br><span class="line"><span class="string">          &lt;Route exact path="</span>/<span class="string">" component=&#123;Home&#125; /&gt;</span></span><br><span class="line"><span class="string">          &lt;Route path="</span>/login<span class="string">" component=&#123;Login&#125;/&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">          // 第一版：最初还没有增加 login页面，没有什么大问题，路由放在一起就好了</span></span><br><span class="line"><span class="string">          &#123;/* &lt;Router&gt;</span></span><br><span class="line"><span class="string">            &lt;main className="</span>content<span class="string">"&gt;</span></span><br><span class="line"><span class="string">              &lt;Header /&gt;</span></span><br><span class="line"><span class="string">              &lt;Route exact path="</span>/<span class="string">" component=&#123;Home&#125;/&gt;</span></span><br><span class="line"><span class="string">              &lt;Route path="</span>/article<span class="string">" component=&#123;Article&#125;/&gt;</span></span><br><span class="line"><span class="string">              &lt;Route path="</span>/todolist<span class="string">" component=&#123;Todo&#125;/&gt;</span></span><br><span class="line"><span class="string">              &lt;Route path="</span>/about<span class="string">" component=&#123;About&#125;/&gt;</span></span><br><span class="line"><span class="string">              &lt;/main&gt;</span></span><br><span class="line"><span class="string">            &lt;/Router&gt; */&#125;</span></span><br><span class="line"><span class="string">        &lt;/div&gt;</span></span><br><span class="line"><span class="string">      &lt;/Router&gt;</span></span><br><span class="line"><span class="string">    )</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">class Home extends React.Component &#123;</span></span><br><span class="line"><span class="string">  render() &#123;</span></span><br><span class="line"><span class="string">    return (</span></span><br><span class="line"><span class="string">      &lt;div className="</span>home<span class="string">"&gt;</span></span><br><span class="line"><span class="string">        &lt;Header /&gt;</span></span><br><span class="line"><span class="string">        &lt;Route path="</span>/todolist<span class="string">" component=&#123;Todo&#125; /&gt;</span></span><br><span class="line"><span class="string">        &lt;Route path="</span>/about<span class="string">" component=&#123;About&#125; /&gt;</span></span><br><span class="line"><span class="string">        &lt;Route path="</span>/article<span class="string">" component=&#123;Article&#125; /&gt;</span></span><br><span class="line"><span class="string">        &lt;Route path="</span>*<span class="string">" render=&#123;() =&gt; (</span></span><br><span class="line"><span class="string">          &lt;h3&gt;沉舟侧畔千帆过&lt;/h3&gt;</span></span><br><span class="line"><span class="string">        )&#125;/&gt;</span></span><br><span class="line"><span class="string">      &lt;/div&gt;</span></span><br><span class="line"><span class="string">    )</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>使用 react-redux 与 React Router v4 非常类似，就像之前一样，只需将 BrowserRouter包在 <provider> 中即可。</provider></p>
+<p>但是 AuthorizedRoute 不是 React-routerV4 的一部分，不能通过 <code>react-router-dom</code> 导出。需要自己根据相关 <a href="https://reacttraining.com/react-router/web/example/auth-workflow" target="_blank" rel="noopener">V4文档</a> 辅助编写完成</p>
+<figure class="highlight jsx"><figcaption><span>授权</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AuthorizedRoute</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  componentWillMount() &#123;</span><br><span class="line">    getLoggedUser()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; <span class="attr">component</span>: Component, pending, logged, ...rest &#125; = <span class="keyword">this</span>.props</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;Route &#123;...rest&#125; render=&#123;props =&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span> (pending) <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>Loading...<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        <span class="keyword">return</span> logged</span><br><span class="line">          ? <span class="xml"><span class="tag">&lt;<span class="name">Component</span> &#123;<span class="attr">...this.props</span>&#125; /&gt;</span></span></span><br><span class="line">          : &lt;Redirect to="/auth/login" /&gt;</span><br><span class="line">      &#125;&#125; /&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const stateToProps = (&#123; loggedUserState &#125;) =&gt; (&#123;</span><br><span class="line">  pending: loggedUserState.pending,</span><br><span class="line">  logged: loggedUserState.logged</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">export default connect(stateToProps)(AuthorizedRoute)</span><br></pre></td></tr></table></figure>
+<p>首先，使用网络请求来 getLoggedUser()，并将 pending 和 logged 插入 Redux 的状态中。pending 仅表示在路由中请求仍在继续。</p>
+<h3 id="其他提示"><a href="#其他提示" class="headerlink" title="其他提示"></a>其他提示</h3><blockquote>
+<p>Link NavLink</p>
+</blockquote>
+<p>NavLink 匹配浏览器的 URL。它可以让我们给任何一个激活的链接设置一个 <code>active</code> 样式。<br>如果没有 exact，由于 v4 的包容性匹配策略，那么在访问 /app/users 时，主页的链接将处于激活中<br>所以参看文章的作者建议：NavLink 带 exact属性等价于 v3 的 <link>，而且更稳定</p>
+<h3 id="动态路由"><a href="#动态路由" class="headerlink" title="动态路由"></a>动态路由</h3><blockquote>
+<p>最好的部分之一</p>
+</blockquote>
+<p>React-router4 中，几乎所有的东西（包括 <code>&lt;Route&gt;</code> ）都是 React 的一个组件，都是要拿来进行渲染的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><pre><code>路由不再是那么难以理解了
+</code></pre><p>我们可以在我们的组件中随时随地的渲染 <code>&lt;Route&gt;</code>。<br>当满足某些条件（path匹配）时，应用程序的整个内容都可以路由到 相干组件，进行渲染，当某些条件不满足的时候，我们可以一处路由，隐藏某些组件，或者渲染其他的一些组件<br>什么？还有 <code>递归路由</code>。<br>好吧，我还需要继续学习</p>
+<p>看来，默写组件只需要向上面那样，只写一个简单的 函数就可以了，不必要写一个 class 类。<br>而且，写函数的话，传参更加方便</p>
+<p>从一个简单的 todolist 开始学 react，到开始尝试使用 react-router，满满都是坑啊。<br>但是，看完了一些前人的总结之后，猛地还是有很多<strong>豁然开朗</strong>的感觉<br>继续学习</p>
+<h2 id="感谢"><a href="#感谢" class="headerlink" title="感谢"></a>感谢</h2><blockquote>
+<p>填坑的道路上，你们的分享就是指路明灯</p>
+</blockquote>
+<p><a href="http://blog.csdn.net/sinat_17775997/article/details/77411324" target="_blank" rel="noopener">关于 React Router 4 的一切</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">------- keep simple <i class="fa fa-heartbeat"></i> keep sunshine -------</div>
+    
+</div>
+
+      
+    </div>
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Leeing
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://leeeing.com/2018/01/16/react-rouuter@4/" title="学习 React-router4 时踩的坑">http://leeeing.com/2018/01/16/react-rouuter@4/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"><i class="fa fa-tag"></i> 前端</a>
+          
+            <a href="/tags/react/" rel="tag"><i class="fa fa-tag"></i> react</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/12/vue-dataBinding/" rel="next" title="Vue 数据绑定学习">
+                <i class="fa fa-chevron-left"></i> Vue 数据绑定学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/16/vue-slot/" rel="prev" title="slot:使用插槽分发内容 学习">
+                slot:使用插槽分发内容 学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/avatar1.png"
+                alt="Leeing" />
+            
+              <p class="site-author-name" itemprop="name">Leeing</p>
+              <p class="site-description motion-element" itemprop="description">to be want to be</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/leeexing" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:leeeing@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Perfect
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://douban.fm/" title="豆瓣FM" target="_blank">豆瓣FM</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://leeeing.com/" title="网易云音乐" target="_blank">网易云音乐</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+<div id="days"></div>
+</script>
+<script language="javascript">
+function show_date_time(){
+    window.setTimeout("show_date_time()", 1000);
+    BirthDay=new Date("12/27/2017 15:00:00");
+    today=new Date();
+    timeold=(today.getTime()-BirthDay.getTime());
+    sectimeold=timeold/1000
+    secondsold=Math.floor(sectimeold);
+    msPerDay=24*60*60*1000
+    e_daysold=timeold/msPerDay
+    daysold=Math.floor(e_daysold);
+    e_hrsold=(e_daysold-daysold)*24;
+    hrsold=setzero(Math.floor(e_hrsold));
+    e_minsold=(e_hrsold-hrsold)*60;
+    minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+    seconds=setzero(Math.floor((e_minsold-minsold)*60));
+    document.getElementById('days').innerHTML="已运行"+daysold+"天"+hrsold+"小时"+minsold+"分"+seconds+"秒";
+}
+function setzero(i){
+    if (i<10)
+    {i="0" + i};
+    return i;
+}
+show_date_time();
+</script>
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#React-router-V4"><span class="nav-number">1.</span> <span class="nav-text">React-router.V4</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#前面-BB"><span class="nav-number">1.1.</span> <span class="nav-text">前面 BB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#理论学习"><span class="nav-number">1.2.</span> <span class="nav-text">理论学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#思维模式的转变"><span class="nav-number">1.2.1.</span> <span class="nav-text">思维模式的转变</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关键字"><span class="nav-number">1.2.2.</span> <span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#包容性路由"><span class="nav-number">1.2.3.</span> <span class="nav-text">包容性路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#排他性路由"><span class="nav-number">1.2.4.</span> <span class="nav-text">排他性路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌套布局"><span class="nav-number">1.2.5.</span> <span class="nav-text">嵌套布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#匹配"><span class="nav-number">1.2.6.</span> <span class="nav-text">匹配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#避免匹配冲突"><span class="nav-number">1.2.7.</span> <span class="nav-text">避免匹配冲突</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#授权路由"><span class="nav-number">1.2.8.</span> <span class="nav-text">授权路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他提示"><span class="nav-number">1.2.9.</span> <span class="nav-text">其他提示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态路由"><span class="nav-number">1.2.10.</span> <span class="nav-text">动态路由</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#感谢"><span class="nav-number">1.4.</span> <span class="nav-text">感谢</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Leeing</span>
+
+  
+</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
